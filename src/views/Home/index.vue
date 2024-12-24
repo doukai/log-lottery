@@ -26,9 +26,22 @@ const personConfig = useStore().personConfig
 const globalConfig = useStore().globalConfig
 const prizeConfig = useStore().prizeConfig
 
-const { getAllPersonList: allPersonList, getNotPersonList: notPersonList, getNotThisPrizePersonList: notThisPrizePersonList } = storeToRefs(personConfig)
+const { getAllPersonList: allPersonList,
+    getNotPersonList: notPersonList,
+    getNotThisPrizePersonList: notThisPrizePersonList
+} = storeToRefs(personConfig)
 const { getCurrentPrize: currentPrize } = storeToRefs(prizeConfig)
-const { getTopTitle: topTitle, getCardColor: cardColor, getPatterColor: patternColor, getPatternList: patternList, getTextColor: textColor, getLuckyColor: luckyColor, getCardSize: cardSize, getTextSize: textSize, getRowCount: rowCount } = storeToRefs(globalConfig)
+const { getTopTitle: topTitle,
+    getCardColor: cardColor,
+    getPatterColor: patternColor,
+    getPatternList: patternList,
+    getTextColor: textColor,
+    getLuckyColor: luckyColor,
+    getCardSize: cardSize,
+    getTextSize: textSize,
+    getRowCount: rowCount,
+    getBackground: homeBackground,
+} = storeToRefs(globalConfig)
 const tableData = ref<any[]>([])
 const currentStatus = ref(0) // 0为初始状态， 1为抽奖准备状态，2为抽奖中状态，3为抽奖结束状态
 const ballRotationY = ref(0)
@@ -433,40 +446,41 @@ async function stopLottery() {
   canOperate.value = false
   rollBall(0, 1)
 
-  const windowSize = { width: window.innerWidth, height: window.innerHeight }
-  luckyTargets.value.forEach((person: IPersonConfig, index: number) => {
-    const cardIndex = selectCard(luckyCardList.value, tableData.value.length, person.id)
-    luckyCardList.value.push(cardIndex)
-    const item = objects.value[cardIndex]
-    const { xTable, yTable } = useElementPosition(item, rowCount.value, { width: cardSize.value.width * 2, height: cardSize.value.height * 2 }, windowSize, index)
-    new TWEEN.Tween(item.position)
-      .to({
-        x: xTable,
-        y: yTable,
-        z: 1000,
-      }, 1200)
-      .easing(TWEEN.Easing.Exponential.InOut)
-      .onStart(() => {
-        item.element = useElementStyle(item.element, person, cardIndex, patternList.value, patternColor.value, luckyColor.value, { width: cardSize.value.width * 2, height: cardSize.value.height * 2 }, textSize.value * 2, 'lucky')
-      })
-      .start()
-      .onComplete(() => {
-        canOperate.value = true
-        currentStatus.value = 3
-      })
-    new TWEEN.Tween(item.rotation)
-      .to({
-        x: 0,
-        y: 0,
-        z: 0,
-      }, 900)
-      .easing(TWEEN.Easing.Exponential.InOut)
-      .start()
-      .onComplete(() => {
-        confettiFire()
-        resetCamera()
-      })
-  })
+    const windowSize = { width: window.innerWidth, height: window.innerHeight }
+    luckyTargets.value.forEach((person: IPersonConfig, index: number) => {
+        let cardIndex = selectCard(luckyCardList.value, tableData.value.length, person.id)
+        luckyCardList.value.push(cardIndex)
+        const totalLuckyCount=luckyTargets.value.length
+        let item = objects.value[cardIndex]
+        const { xTable, yTable } = useElementPosition(item, rowCount.value,totalLuckyCount, { width: cardSize.value.width * 2, height: cardSize.value.height * 2 }, windowSize, index)
+        new TWEEN.Tween(item.position)
+            .to({
+                x: xTable,
+                y: yTable,
+                z: 1000
+            }, 1200)
+            .easing(TWEEN.Easing.Exponential.InOut)
+            .onStart(() => {
+                item.element = useElementStyle(item.element, person, cardIndex, patternList.value, patternColor.value, luckyColor.value, { width: cardSize.value.width * 2, height: cardSize.value.height * 2 }, textSize.value * 2, 'lucky')
+            })
+            .start()
+            .onComplete(() => {
+                canOperate.value = true
+                currentStatus.value = 3
+            })
+        new TWEEN.Tween(item.rotation)
+            .to({
+                x: 0,
+                y: 0,
+                z: 0
+            }, 900)
+            .easing(TWEEN.Easing.Exponential.InOut)
+            .start()
+            .onComplete(() => {
+                confettiFire()
+                resetCamera()
+            })
+    })
 }
 // 继续
 async function continueLottery() {
@@ -694,18 +708,24 @@ onUnmounted(() => {
               <div id="stars" />
             </div>
 
-            <div id="glow">
-              <div class="circle" />
-              <div class="circle" />
+                        <div id="glow">
+                            <div class="circle"></div>
+                            <div class="circle"></div>
+                        </div>
+                    </button>
+                </div>
             </div>
-          </button>
+            <!--   <button id="table" @click="transform(targets.table, 2000)">TABLE</button> -->
+            <!--  <button id="helix" @click="transform(targets.helix, 2000)">HELIX</button> -->
+
         </div>
-      </div>
+        <!-- end -->
     </div>
-    <!-- end -->
-  </div>
-  <StarsBackground />
-  <PrizeList class="absolute left-0 top-32" />
+    <StarsBackground :home-background="homeBackground"></StarsBackground>
+
+    <!-- <LuckyView :luckyPersonList="luckyTargets"  ref="LuckyViewRef"></LuckyView> -->
+    <!-- <PlayMusic class="absolute right-0 bottom-1/2"></PlayMusic> -->
+    <PrizeList class="absolute left-0 top-32"></PrizeList>
 </template>
 
 <style scoped lang="scss">

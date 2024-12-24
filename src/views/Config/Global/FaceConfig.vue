@@ -16,8 +16,22 @@ import 'vue3-colorpicker/style.css'
 const { t } = useI18n()
 const globalConfig = useStore().globalConfig
 const personConfig = useStore().personConfig
-const prizeConfig = useStore().prizeConfig
-const { getTopTitle: topTitle, getTheme: localTheme, getPatterColor: patternColor, getPatternList: patternList, getCardColor: cardColor, getLuckyColor: luckyCardColor, getTextColor: textColor, getCardSize: cardSize, getTextSize: textSize, getRowCount: rowCount, getIsShowPrizeList: isShowPrizeList, getLanguage: userLanguage } = storeToRefs(globalConfig)
+const prizeConfig  = useStore().prizeConfig
+const { getTopTitle: topTitle,
+    getTheme: localTheme,
+    getPatterColor: patternColor,
+    getPatternList: patternList,
+    getCardColor: cardColor,
+    getLuckyColor: luckyCardColor,
+    getTextColor: textColor,
+    getCardSize: cardSize,
+    getTextSize: textSize,
+    getRowCount: rowCount,
+    getIsShowPrizeList: isShowPrizeList, 
+    getLanguage: userLanguage,
+    getBackground: backgroundImage,
+    getImageList: imageList
+} = storeToRefs(globalConfig)
 const { getAlreadyPersonList: alreadyPersonList, getNotPersonList: notPersonList } = storeToRefs(personConfig)
 const colorPickerRef = ref()
 const resetDataDialogRef = ref()
@@ -38,13 +52,13 @@ const isShowPrizeListValue = ref(structuredClone(isShowPrizeList.value))
 const patternColorValue = ref(structuredClone(patternColor.value))
 const themeList = ref(Object.keys(daisyuiThemes))
 const daisyuiThemeList = ref<ThemeDaType>(daisyuiThemes)
+const backgroundImageValue = ref(backgroundImage.value)
 const formData = ref({
   rowCount: rowCountValue,
 })
 const formErr = ref({
   rowCount: '',
 })
-
 const schema = zod.object({
   rowCount: zod.number({
     required_error: i18n.global.t('error.require'),
@@ -89,12 +103,12 @@ function resetPattern() {
   globalConfig.resetPatternList()
 }
 
-function resetData() {
-  globalConfig.reset()
-  personConfig.reset()
-  prizeConfig.resetDefault()
-  // 刷新页面
-  window.location.reload()
+const resetData = () => {
+    globalConfig.reset();
+    personConfig.reset();
+    prizeConfig.resetDefault();
+    // 刷新页面
+    window.location.reload()
 }
 
 // const handleChangeShowFields = (fieldItem: any) => {
@@ -147,6 +161,9 @@ watch(cardSizeValue, (val: { width: number, height: number }) => {
 }, { deep: true })
 watch(isShowPrizeListValue, () => {
   globalConfig.setIsShowPrizeList(isShowPrizeListValue.value)
+})
+watch(backgroundImageValue, (val: {}) => {
+    globalConfig.setBackground(val)
 })
 watch(languageValue, (val: string) => {
   globalConfig.setLanguage(val)
@@ -237,6 +254,17 @@ onMounted(() => {
         <option v-for="(item, index) in themeList" :key="index" :value="item">{{ item }}</option>
       </select>
     </label>
+    <label class="w-full max-w-xs form-control">
+            <div class="label">
+                <span class="label-text">选择背景图片</span>
+            </div>
+            <select data-choose-theme class="w-full max-w-xs border-solid select border-1"
+                v-model="backgroundImageValue">
+                <option disabled selected>选取背景图片</option>
+                <option v-for="(item, index) in [{ name: '无', url: '', id: '' }, ...imageList]" :key="index"
+                    :value="item">{{ item.name }}</option>
+            </select>
+        </label>
     <label class="w-full max-w-xs form-control">
       <div class="label">
         <span class="label-text">{{ t('table.cardColor') }}</span>
