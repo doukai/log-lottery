@@ -72,6 +72,8 @@ export default {
     language: 'Language',
     cardColor: 'Card Color',
     winnerColor: 'Winner Color',
+    backgroundImage: 'Background Image',
+    None:'None',
     textColor: 'Text Color',
     cardWidth: 'Card Width',
     cardHeight: 'Card Height',

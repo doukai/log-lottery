@@ -72,6 +72,8 @@ export default {
     language: '语言',
     cardColor: '卡片颜色',
     winnerColor: '中奖卡片颜色',
+    backgroundImage: '选择背景图片',
+    None:'无',
     textColor: '文字颜色',
     cardWidth: '卡片宽度',
     cardHeight: '卡片高度',

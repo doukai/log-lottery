@@ -256,12 +256,12 @@ onMounted(() => {
     </label>
     <label class="w-full max-w-xs form-control">
             <div class="label">
-                <span class="label-text">选择背景图片</span>
+                <span class="label-text">{{ t('table.backgroundImage') }}</span>
             </div>
             <select data-choose-theme class="w-full max-w-xs border-solid select border-1"
                 v-model="backgroundImageValue">
-                <option disabled selected>选取背景图片</option>
-                <option v-for="(item, index) in [{ name: '无', url: '', id: '' }, ...imageList]" :key="index"
+                <option disabled selected>{{ t('table.backgroundImage') }}</option>
+                <option v-for="(item, index) in [{ name:  t('table.None'), url: '', id: '' }, ...imageList]" :key="index"
                     :value="item">{{ item.name }}</option>
             </select>
         </label>
