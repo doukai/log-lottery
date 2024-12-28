@@ -4,7 +4,7 @@ import { storeToRefs } from 'pinia'
 import useStore from '@/store'
 
 import ImageSync from '@/components/ImageSync/index.vue'
-import defaultPrizeImage from '@/assets/images/龙.png'
+import defaultPrizeImage from '@/assets/images/蛇.png'
 import { IPrizeConfig } from '../../types/storeType';
 
 import EditSeparateDialog from '@/components/NumberSeparate/EditSeparateDialog.vue'
