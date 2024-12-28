@@ -10,7 +10,7 @@
 [![github](https://img.shields.io/badge/Author-log1997-blue.svg)](https://github.com/log1997)
 [![vue3](https://img.shields.io/badge/VUE-3-green.svg)](https://github.com/log1997)
 [![build](https://img.shields.io/github/actions/workflow/status/log1997/log-lottery/node.js.yml)](https://github.com/log1997)
-
+[![stars](https://img.shields.io/github/stars/log1997/log-lottery)](https://github.com/log1997)
 </div>
 
 log-lottery是一个可配置可定制化的抽奖应用，炫酷3D球体，可用于年会抽奖等活动，支持奖品、人员、界面、图片音乐配置。
